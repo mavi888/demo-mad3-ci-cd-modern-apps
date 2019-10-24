@@ -1,0 +1,32 @@
+{
+  "name": "demo-mad1-ci-cd-modern-apps",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "config": {
+    "stackName": "demo-mad1",
+    "bucketName": "marcia-deploys"
+  },
+  "scripts": {
+    "test": "jest tests/*",
+    "sam-deploy": "sam build && sam package --template-file template.yaml --s3-bucket $npm_package_config_bucketName --output-template-file packaged.yaml && sam deploy --template-file packaged.yaml --stack-name $npm_package_config_stackName --capabilities CAPABILITY_IAM && aws cloudformation describe-stacks --stack-name $npm_package_config_stackName --query 'Stacks[].Outputs'",
+    "describe": "aws cloudformation describe-stacks --stack-name $npm_package_config_stackName --query 'Stacks[].Outputs'",
+    "package": "aws cloudformation package --template-file template.yaml --s3-bucket $npm_package_config_bucketName --output-template-file packaged.yaml",
+    "deploy": "aws cloudformation deploy --template-file packaged.yaml --stack-name $npm_package_config_stackName --capabilities CAPABILITY_IAM"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.552.0",
+    "jest": "^24.9.0",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
+}

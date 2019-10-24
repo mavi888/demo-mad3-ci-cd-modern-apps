@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      TracingEnabled: true
+  hello:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handler.hello
+      Runtime: nodejs10.x
+      CodeUri: s3://marcia-deploys/1e626c0b826daea5a7c7c6ca7d001c18
+      Tracing: Active
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: MyDynamoDBTable
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: MyDynamoDBTable
+      Events:
+        CreateAPI:
+          Type: Api
+          Properties:
+            RestApiId:
+              Ref: MyApi
+            Path: /hello
+            Method: POST
+        OtherOperationsAPI:
+          Type: Api
+          Properties:
+            RestApiId:
+              Ref: MyApi
+            Path: /hello/{itemId}
+            Method: ANY
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Type: Linear10PercentEvery1Minute
+  MyDynamoDBTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: itemId
+        Type: String
+Outputs:
+  Region:
+    Description: Region
+    Value:
+      Ref: AWS::Region
+  ApiId:
+    Description: API ID
+    Value:
+      Ref: MyApi
+  ApiUrl:
+    Description: API endpoint URL for Prod environment
+    Value:
+      Fn::Sub: https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/dev/
