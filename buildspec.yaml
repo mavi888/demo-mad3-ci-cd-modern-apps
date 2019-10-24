@@ -25,12 +25,13 @@ phases:
       - node -v
       - npm -v
       - pip install --upgrade awscli aws-sam-cli
+      - cd app
+      - npm install
   pre_build:
     commands:
       # Use Pre-Build phase to run tests, install any code deps or any other customization before build
       # - echo "[Pre-Build phase]"
       - echo "Starting to run unit tests"
-      - cd app
       - npm test
       - sam build
       - cd ..
