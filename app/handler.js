@@ -4,7 +4,7 @@ const databaseManager = require('./databaseManager');
 const uuidv1 = require('uuid/v1');
 
 exports.hello = async (event, context)  => {
-
+	console.log('hello cPH!')
 	switch (event.httpMethod) {
 		case 'DELETE':
 			console.log('chau');

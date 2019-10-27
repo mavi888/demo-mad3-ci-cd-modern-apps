@@ -18,7 +18,7 @@ phases:
   install:
     commands:
       # Use Install phase to install packages or any pre-reqs you may need throughout the build (e.g. dev deps, security checks, etc.)
-      - echo "Install node and npm"
+      - echo "Install node and npm and sam"
       - sudo apt-get install curl
       - curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
       - sudo apt-get install -y nodejs
